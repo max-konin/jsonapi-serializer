@@ -845,7 +845,7 @@ describe('JSON API Deserializer', function () {
           }
         }]
       };
-      it('should retuns document with "relaitonId" ', function (done) {
+      it('should add "relation-id" attribute', function (done) {
         var dataSet = _.cloneDeep(baseDataSet);
         new JSONAPIDeserializer()
         .deserialize(dataSet, function (err, json) {
@@ -1214,7 +1214,7 @@ describe('JSON API Deserializer', function () {
                   address_line1: '406 Madison Court',
                   zip_code: '49426',
                   id: '54735722e16620ba1eee36af',
-                  'country-id': '54735722e16609ba1eee36af'
+                  country_id: '54735722e16609ba1eee36af'
                 }
               }
             });
