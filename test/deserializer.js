@@ -392,7 +392,8 @@ describe('JSON API Deserializer', function () {
               id: '54735697e16624ba1eee36bf',
               'address-line1': '361 Shady Lane',
               'zip-code': '23185',
-              country: 'USA'
+              country: 'USA',
+              'lock-id': '2'
             });
 
             done();
@@ -828,6 +829,37 @@ describe('JSON API Deserializer', function () {
       });
     });
 
+    describe('Without included and valueForRelationship', function() {
+      var baseDataSet = {
+        data: [{
+          type: 'users',
+          id: '54735750e16638ba1eee59cb',
+          attributes: {
+            'first-name': 'Sandro',
+            'last-name': 'Munda'
+          },
+          relationships: {
+            address: {
+              data: { type: 'addresses', id: '54735722e16620ba1eee36af' }
+            }
+          }
+        }]
+      };
+      it('should retuns document with "relaitonId" ', function (done) {
+        var dataSet = _.cloneDeep(baseDataSet);
+        new JSONAPIDeserializer()
+        .deserialize(dataSet, function (err, json) {
+          expect(json).to.be.an('array').with.length(1);
+
+          expect(json[0]).to.have.key('id', 'first-name', 'last-name', 'address-id');
+
+          expect(json[0]['address-id']).to.be.eql('54735722e16620ba1eee36af');
+
+          done(null, json);
+        });
+      });
+    })
+
     describe('With empty relationship', function () {
       it('should include the relationship as null (one-to)', function (done) {
         var dataSet = {
@@ -1182,6 +1214,7 @@ describe('JSON API Deserializer', function () {
                   address_line1: '406 Madison Court',
                   zip_code: '49426',
                   id: '54735722e16620ba1eee36af',
+                  'country-id': '54735722e16609ba1eee36af'
                 }
               }
             });
